@@ -1,0 +1,137 @@
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <functional>
+#include <string>
+#include <chrono>
+#include <atomic>
+#include <vector>
+
+class WeightSensor {
+public:
+    WeightSensor() : running(false), currentWeight(0.0) {}
+
+    ~WeightSensor() {
+        stop();
+    }
+
+    void setOnWeightChangeCallback(std::function<void(float)> cb) {
+        onWeightChange = cb;
+    }
+
+    void start() {
+        if (running) return;
+        running = true;
+        workerThread = std::thread(&WeightSensor::monitorLoop, this);
+    }
+
+    void stop() {
+        running = false;
+        if (workerThread.joinable()) {
+            workerThread.join();
+        }
+    }
+
+    float getWeight() {
+        std::lock_guard<std::mutex> lock(dataMutex);
+        return currentWeight;
+    }
+
+private:
+    std::atomic<bool> running;
+    float currentWeight;
+    std::mutex dataMutex;
+    std::thread workerThread;
+    std::function<void(float)> onWeightChange;
+
+    void monitorLoop() {
+        while (running) {
+            float newWeight = simulateHardwareRead(); 
+            
+            {
+                std::lock_guard<std::mutex> lock(dataMutex);
+                currentWeight = newWeight;
+            }
+
+            if (onWeightChange) {
+                onWeightChange(newWeight);
+            }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
+    }
+
+    float simulateHardwareRead() {
+        return 150.5f; 
+    }
+};
+
+class LockerController {
+public:
+    LockerController(WeightSensor& sensor) : sensor(sensor), status("Empty") {
+        sensor.setOnWeightChangeCallback([this](float weight) {
+            this->updateStatusBasedOnWeight(weight);
+        });
+    }
+
+    void processRentRequest() {
+        std::thread([this]() {
+            std::lock_guard<std::mutex> lock(stateMutex);
+            status = "Locker rented, awaiting item...";
+            
+            setLockState(true);
+            std::cout << "[Hardware] Locker Unlocked" << std::endl;
+            
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+            
+            setLockState(false);
+            std::cout << "[Hardware] Locker Relocked" << std::endl;
+        }).detach();
+    }
+
+    std::string getFullStatus() {
+        std::lock_guard<std::mutex> lock(stateMutex);
+        return "Status: " + status + " | Weight: " + std::to_string(sensor.getWeight()) + "g";
+    }
+
+private:
+    WeightSensor& sensor;
+    std::string status;
+    std::mutex stateMutex;
+
+    void updateStatusBasedOnWeight(float weight) {
+        std::lock_guard<std::mutex> lock(stateMutex);
+        if (weight > 10.0f) {
+            status = "Item Detected";
+        } else {
+            status = "Empty";
+        }
+    }
+
+    void setLockState(bool unlock) {}
+};
+
+int main() {
+    std::cout << "Starting Real-Time Smart Locker System on Raspberry Pi..." << std::endl;
+
+    WeightSensor sensor;
+    LockerController controller(sensor);
+
+    sensor.start();
+    
+    std::cout << "System ready. Press Enter to simulate a Rent Event or Ctrl+C to quit." << std::endl;
+
+    while (true) {
+        std::string input;
+        std::getline(std::cin, input);
+        
+        if (input == "rent") {
+            controller.processRentRequest();
+        }
+        
+        std::cout << controller.getFullStatus() << std::endl;
+    }
+
+    sensor.stop();
+    return 0;
+}
