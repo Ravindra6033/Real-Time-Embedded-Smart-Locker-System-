@@ -1,16 +1,32 @@
 Description: This project is a high-precision, cyber-physical security solution that leverages deterministic weight sensing to manage locker rentals. Unlike standard electronic lockers that rely solely on PIN entry, this system uses a 24-bit ADC pipeline to verify the physical presence of items in real-time, preventing "ghost" bookings and ensuring a robust audit trail.
+
+
 Components Used: Raspberry Pi 5, HX711 Load cell with ADC, Solenoid Lock, 3d Printed platform, external locker and hinges
+
+
 Hardware Setup: HX711 --> Raspberry PI
+
 VCC 3.3V --> Pin 1
+
 GND --> Pin 6
+
 DT --> Pin 29
+
 SCK --> Pin 23
 
+
+
 Load Cell --> HX711
+
 Red wire --> E+
+
 Black Wire --> E-
+
 White --> A-
+
 Green --> A+
+
+
 
 Repository Contents
 1. Main File - The initial tested code
