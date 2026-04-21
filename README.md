@@ -44,5 +44,5 @@ Enhanced UI: Responsive HTML/JS interface for user interactions and PIN manageme
  2. Intro Video.mp4 - our first introduction video uploaded on social media handles 
 
 
- Social Media 
+ Social Media:
  Instagram - https://www.instagram.com/realtimeembeddedproject5/ 
