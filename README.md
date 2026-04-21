@@ -42,4 +42,7 @@ Enhanced UI: Responsive HTML/JS interface for user interactions and PIN manageme
  Other Files in the Repository
  1. Real Time Embedded Smart Locker System - the Idea presentation PPT
  2. Intro Video.mp4 - our first introduction video uploaded on social media handles 
-   
+
+
+ Social Media 
+ Instagram - https://www.instagram.com/realtimeembeddedproject5/ 
