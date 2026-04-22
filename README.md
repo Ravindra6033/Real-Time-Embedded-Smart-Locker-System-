@@ -39,6 +39,12 @@ Enhanced UI: Responsive HTML/JS interface for user interactions and PIN manageme
 5. rt features update.cpp - the final code with all the modifications involved and all the measures taken to ensure smooth function of the system and no hiccups of real time data observation
 6. CmakeLists.cpp - all the external libraries directories
 
+
+
+
+Dashboard URL : http://10.174.53.58:8080/
+
+
  Other Files in the Repository
  1. Real Time Embedded Smart Locker System - the Idea presentation PPT
  2. Intro Video.mp4 - our first introduction video uploaded on social media handles 
