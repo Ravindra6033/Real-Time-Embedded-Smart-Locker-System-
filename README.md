@@ -46,3 +46,13 @@ Enhanced UI: Responsive HTML/JS interface for user interactions and PIN manageme
 
  Social Media:
  Instagram - https://www.instagram.com/realtimeembeddedproject5/ 
+
+
+ Declaration of Originality
+By submitting this coursework, every team member hereby declares that:
+
+This project is the result of our own independent work.
+
+All sources used, including software libraries, hardware designs, and external code snippets, have been credited according to their respective open-source licenses.
+
+We acknowledge the use of Generative AI such as Gemini, Claude and ChatGPT as a collaborative tool for refining system logic, optimizing real-time C++ 17 code structures, and drafting project documentation.
